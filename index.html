@@ -1,418 +1,192 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Bomba de emociones</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
-
 <style>
+
 html,body{
-  margin:0;
-  padding:0;
-  background:transparent;
-  font-family:'Poppins',sans-serif;
-  overflow:hidden;
+margin:0;
+padding:0;
+
+background:transparent;
+overflow:hidden;
+
+font-family:'Poppins',sans-serif;
 }
 
 .game{
-  width:100vw;
-  height:100vh;
-  position:relative;
-  background:transparent;
+
+position:relative;
+
+width:1365px;
+height:768px;
+
+background:transparent;
+
+overflow:hidden;
+
 }
+
+/* panel gris */
 
 .panel{
-  width:92vw;
-  height:86vh;
-  margin:4vh auto 0;
-  background:rgba(245,245,245,.92);
-  border-radius:34px;
-  position:relative;
-  overflow:hidden;
+
+position:absolute;
+
+left:35px;
+top:50px;
+
+width:1290px;
+height:550px;
+
+background:#ECECEC;
+
+border-radius:35px;
+
 }
+
+/* pista */
 
 .pista{
-  width:78%;
-  margin:28px auto 0;
-  background:white;
-  padding:16px 26px;
-  border-radius:28px;
-  text-align:center;
-  font-size:26px;
-  line-height:1.2;
+
+position:absolute;
+
+left:130px;
+top:25px;
+
+width:960px;
+
+padding:16px;
+
+background:white;
+
+border-radius:25px;
+
+font-size:26px;
+
+font-weight:700;
+
+text-align:center;
+
 }
+
+/* casillas */
 
 .word-boxes{
-  display:flex;
-  justify-content:center;
-  gap:10px;
-  margin-top:55px;
-  width:72%;
-  margin-left:7%;
-  flex-wrap:wrap;
+
+position:absolute;
+
+left:240px;
+
+top:155px;
+
+display:flex;
+
+gap:10px;
+
 }
+
+/* casillas rosadas */
 
 .card{
-  width:68px;
-  height:68px;
-  perspective:1000px;
+
+width:68px;
+height:68px;
+
+perspective:1000px;
+
 }
 
-.inner{
-  width:100%;
-  height:100%;
-  position:relative;
-  transform-style:preserve-3d;
-  transition:.6s;
-}
-
-.card.flip .inner{
-  transform:rotateY(180deg);
-}
-
-.front,.back{
-  position:absolute;
-  width:100%;
-  height:100%;
-  border-radius:14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  backface-visibility:hidden;
-  font-size:40px;
-  font-weight:700;
-}
-
-.front{
-  background:#ff23df;
-}
-
-.back{
-  background:#ff23df;
-  color:#000;
-  transform:rotateY(180deg);
-}
+/* teclado */
 
 .keyboard{
-  width:56%;
-  margin-left:8%;
-  margin-top:38px;
-  display:grid;
-  grid-template-columns:repeat(9,58px);
-  gap:10px;
+
+position:absolute;
+
+left:135px;
+
+top:260px;
+
+display:grid;
+
+grid-template-columns:
+repeat(9,58px);
+
+gap:10px;
+
 }
 
 .keyboard button{
-  width:58px;
-  height:58px;
-  background:white;
-  border:2px solid #444;
-  border-radius:12px;
-  font-size:31px;
-  font-family:'Poppins',sans-serif;
-  font-weight:700;
-  cursor:pointer;
+
+width:58px;
+height:58px;
+
+border-radius:12px;
+
+border:2px solid #555;
+
+background:white;
+
+font-family:Poppins;
+
+font-size:30px;
+
+font-weight:700;
+
+cursor:pointer;
+
 }
 
-.keyboard button.used{
-  opacity:.35;
-  pointer-events:none;
-}
+/* personaje */
 
 .character{
-  position:absolute;
-  right:5%;
-  bottom:2%;
-  width:34%;
-  max-width:480px;
-  min-width:300px;
-  height:auto;
-  z-index:20;
-  pointer-events:none;
-  transform-origin:bottom center;
-  transition:transform .5s, filter .5s;
+
+position:absolute;
+
+/* acercarlo */
+
+left:830px;
+
+/* subirlo */
+
+top:185px;
+
+/* tamaño grande */
+
+width:320px;
+
+height:auto;
+
+z-index:100;
+
+pointer-events:none;
+
 }
 
-.state1{
-  transform:rotate(-2deg) scale(1.01);
-  animation:s1 .8s infinite;
+/* letras */
+
+.front,.back{
+
+font-size:42px;
+
+font-weight:700;
+
 }
 
-.state2{
-  transform:rotate(-4deg) scale(1.03);
-  animation:s2 .7s infinite;
+.front{
+
+background:#ff23df;
+
 }
 
-.state3{
-  transform:rotate(-6deg) scale(1.05);
-  filter:brightness(.9);
-  animation:s3 .6s infinite;
+.back{
+
+background:#ff23df;
+
 }
 
-.state4{
-  transform:rotate(8deg) scale(.96);
-  filter:brightness(.7);
-  animation:s4 .5s infinite;
+.used{
+
+opacity:.35;
+
+pointer-events:none;
+
 }
 
-@keyframes s1{
-  0%{transform:translateX(0)}
-  50%{transform:translateX(-2px)}
-  100%{transform:translateX(2px)}
-}
-
-@keyframes s2{
-  0%{transform:translateX(0)}
-  50%{transform:translateX(-3px)}
-  100%{transform:translateX(3px)}
-}
-
-@keyframes s3{
-  0%{transform:translateX(0)}
-  50%{transform:translateX(-4px)}
-  100%{transform:translateX(4px)}
-}
-
-@keyframes s4{
-  0%{transform:translateX(-5px)}
-  50%{transform:translateX(5px)}
-  100%{transform:translateX(-5px)}
-}
 </style>
-</head>
-
-<body>
-
-<div class="game">
-  <div class="panel">
-
-    <div class="pista" id="pista">Cargando...</div>
-
-    <div class="word-boxes" id="boxes"></div>
-
-    <div class="keyboard" id="keyboard"></div>
-
-    <img id="character" class="character" src="Saludo_cuerpo_completo.gif" alt="personaje">
-
-  </div>
-</div>
-
-<script>
-let currentWord="";
-let revealed=[];
-let errors=0;
-let data=[];
-let palabraAnterior=-1;
-
-const saludoGif="Saludo_cuerpo_completo.gif";
-const muertoGif="Muerto.gif";
-const maxErrors=4;
-
-const boxes=document.getElementById("boxes");
-const keyboard=document.getElementById("keyboard");
-const pista=document.getElementById("pista");
-const character=document.getElementById("character");
-
-const abc=[
-  "A","B","C","D","E","F","G","H","I",
-  "J","K","L","M","N","Ñ","O","P","Q",
-  "R","S","T","U","V","W","X","Y","Z"
-];
-
-fetch("palabras.csv")
-.then(r=>r.text())
-.then(csv=>{
-  const rows=csv.split(/\r?\n/);
-  data=[];
-
-  for(let i=1;i<rows.length;i++){
-    const row=rows[i].trim();
-    if(!row) continue;
-
-    const c=row.split(",");
-
-    if(c.length>=2){
-      data.push({
-        palabra:limpiarTexto(c[0]),
-        pista:limpiarTexto(c.slice(1).join(","))
-      });
-    }
-  }
-
-  nuevaPalabra();
-})
-.catch(()=>{
-  data=[
-    {
-      palabra:"VULNERABLE",
-      pista:"Lo que intentas esconder tras una risa ruidosa o una actitud agresiva"
-    },
-    {
-      palabra:"EMPATIA",
-      pista:"Capacidad de comprender a otra persona"
-    },
-    {
-      palabra:"MIEDO",
-      pista:"Emoción que aparece ante una amenaza"
-    },
-    {
-      palabra:"ALEGRIA",
-      pista:"Emoción asociada a bienestar y satisfacción"
-    }
-  ];
-
-  nuevaPalabra();
-});
-
-function limpiarTexto(texto){
-  return texto
-    .trim()
-    .replace(/^"+|"+$/g,"")
-    .replace(/"+$/g,"");
-}
-
-function nuevaPalabra(){
-  let indice;
-
-  do{
-    indice=Math.floor(Math.random()*data.length);
-  }while(indice===palabraAnterior && data.length>1);
-
-  palabraAnterior=indice;
-
-  start(data[indice].palabra,data[indice].pista);
-}
-
-function start(word,hint){
-  errors=0;
-
-  character.src=saludoGif;
-  character.className="character";
-
-  currentWord=word
-    .trim()
-    .toUpperCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g,"")
-    .substring(0,11);
-
-  revealed=Array(currentWord.length).fill(false);
-
-  pista.innerHTML=limpiarTexto(hint);
-
-  drawBoxes();
-  drawKeyboard();
-}
-
-function drawBoxes(){
-  boxes.innerHTML="";
-
-  currentWord.split("").forEach((letter,index)=>{
-    boxes.innerHTML+=`
-      <div class="card" data-index="${index}">
-        <div class="inner">
-          <div class="front"></div>
-          <div class="back">${letter}</div>
-        </div>
-      </div>
-    `;
-  });
-}
-
-function drawKeyboard(){
-  keyboard.innerHTML="";
-
-  abc.forEach(letter=>{
-    const btn=document.createElement("button");
-    btn.innerHTML=letter;
-
-    btn.onclick=()=>{
-      check(letter);
-      btn.classList.add("used");
-    };
-
-    keyboard.appendChild(btn);
-  });
-}
-
-function check(letter){
-  let found=false;
-
-  currentWord.split("").forEach((l,i)=>{
-    if(l===letter){
-      found=true;
-      revealed[i]=true;
-
-      document
-        .querySelector(`.card[data-index='${i}']`)
-        .classList.add("flip");
-    }
-  });
-
-  if(!found){
-    handleError();
-  }
-
-  checkWin();
-}
-
-function handleError(){
-  if(errors>=maxErrors) return;
-
-  errors++;
-
-  vibrateError();
-
-  character.className="character";
-
-  if(errors===1){
-    character.src=saludoGif;
-    character.classList.add("state1");
-  }
-
-  if(errors===2){
-    character.src=muertoGif;
-    character.classList.add("state2");
-  }
-
-  if(errors===3){
-    character.src=muertoGif;
-    character.classList.add("state3");
-  }
-
-  if(errors===4){
-    character.src=muertoGif;
-    character.classList.add("state4");
-
-    setTimeout(()=>{
-      nuevaPalabra();
-    },1400);
-  }
-}
-
-function checkWin(){
-  if(revealed.every(v=>v)){
-    document.querySelectorAll(".keyboard button").forEach(btn=>{
-      btn.disabled=true;
-    });
-
-    setTimeout(()=>{
-      nuevaPalabra();
-    },1200);
-  }
-}
-
-function vibrateError(){
-  if(!navigator.vibrate) return;
-
-  if(errors===1) navigator.vibrate(70);
-  if(errors===2) navigator.vibrate([80,40,80]);
-  if(errors===3) navigator.vibrate([100,50,100]);
-  if(errors===4) navigator.vibrate([160,80,200]);
-}
-</script>
-
-</body>
-</html>
