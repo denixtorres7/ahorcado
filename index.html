@@ -35,7 +35,7 @@ body{
   display:flex;
   justify-content:center;
   gap:12px;
-  margin:80px auto 0;
+  margin:90px auto 0;
   flex-wrap:wrap;
   width:78%;
 }
@@ -89,10 +89,10 @@ body{
   flex-wrap:wrap;
   justify-content:center;
   gap:10px;
-  width:55%;
-  margin:auto;
-  margin-top:90px;
-  padding-right:500px;
+  width:58%;
+  margin-left:5%;
+  margin-top:110px;
+  padding-right:0;
   box-sizing:border-box;
 }
 
@@ -114,67 +114,61 @@ body{
 
 .character{
   position:absolute;
-  right:20px;
+  right:70px;
   bottom:40px;
-  width:620px;
+  width:430px;
   height:auto;
   z-index:10;
   pointer-events:none;
-  transform-origin:bottom right;
+  transform-origin:bottom center;
   transition:transform .5s, filter .5s;
 }
 
-/* ERROR 1 */
 .state1{
-  transform:rotate(-5deg) scale(1.03);
-  animation:shakeLight .5s infinite;
+  transform:rotate(-3deg) scale(1.02);
+  animation:shakeLight .7s infinite;
 }
 
-/* ERROR 2 */
 .state2{
-  transform:rotate(-10deg) scale(1.08);
-  filter:contrast(1.2);
-  animation:shakeMedium .4s infinite;
+  transform:rotate(-6deg) scale(1.04);
+  filter:contrast(1.1);
+  animation:shakeMedium .6s infinite;
 }
 
-/* ERROR 3 */
 .state3{
-  transform:rotate(-15deg) scale(1.12);
-  filter:brightness(.8);
-  animation:shakeHard .25s infinite;
+  transform:rotate(-8deg) scale(1.06);
+  filter:brightness(.9);
+  animation:shakeHard .5s infinite;
 }
 
-/* MUERTO FINAL */
 .state4{
-  transform:rotate(18deg) scale(.95);
-  filter:brightness(.55);
-  animation:shakeDeath .15s infinite;
+  transform:rotate(10deg) scale(.96);
+  filter:brightness(.7);
+  animation:shakeDeath .4s infinite;
 }
 
 @keyframes shakeLight{
+  0%{transform:translateX(0)}
+  50%{transform:translateX(-2px)}
+  100%{transform:translateX(2px)}
+}
+
+@keyframes shakeMedium{
+  0%{transform:translateX(0)}
+  50%{transform:translateX(-3px)}
+  100%{transform:translateX(3px)}
+}
+
+@keyframes shakeHard{
   0%{transform:translateX(0)}
   50%{transform:translateX(-4px)}
   100%{transform:translateX(4px)}
 }
 
-@keyframes shakeMedium{
-  0%{transform:translateX(0)}
-  25%{transform:translateX(-7px)}
-  50%{transform:translateX(7px)}
-  100%{transform:translateX(0)}
-}
-
-@keyframes shakeHard{
-  0%{transform:translateX(0)}
-  25%{transform:translateX(-10px)}
-  50%{transform:translateX(10px)}
-  100%{transform:translateX(0)}
-}
-
 @keyframes shakeDeath{
-  0%{transform:translateX(-14px)}
-  50%{transform:translateX(14px)}
-  100%{transform:translateX(-14px)}
+  0%{transform:translateX(-5px)}
+  50%{transform:translateX(5px)}
+  100%{transform:translateX(-5px)}
 }
 
 @media(max-width:900px){
@@ -201,7 +195,8 @@ body{
 
   .keyboard{
     width:92%;
-    padding-right:0;
+    margin-left:auto;
+    margin-right:auto;
     margin-top:40px;
   }
 
@@ -238,6 +233,8 @@ body{
 let currentWord="";
 let revealed=[];
 let errors=0;
+let palabraAnterior=-1;
+let data=[];
 
 const maxErrors=4;
 
@@ -261,7 +258,7 @@ fetch("palabras.csv")
 .then(r=>r.text())
 .then(csv=>{
   let rows=csv.split(/\r?\n/);
-  let data=[];
+  data=[];
 
   for(let i=1;i<rows.length;i++){
     let c=rows[i].split(",");
@@ -274,15 +271,44 @@ fetch("palabras.csv")
     }
   }
 
-  let random=data[Math.floor(Math.random()*data.length)];
-  start(random.palabra,random.pista);
+  nuevaPalabra();
 })
 .catch(()=>{
-  start(
-    "VULNERABLE",
-    "Lo que intentas esconder tras una risa ruidosa o una actitud agresiva."
-  );
+  data=[
+    {
+      palabra:"VULNERABLE",
+      pista:"Lo que intentas esconder tras una risa ruidosa o una actitud agresiva."
+    },
+    {
+      palabra:"MIEDO",
+      pista:"Emoción que aparece ante una amenaza."
+    },
+    {
+      palabra:"ALEGRIA",
+      pista:"Emoción asociada a bienestar y satisfacción."
+    },
+    {
+      palabra:"EMPATIA",
+      pista:"Capacidad de comprender lo que siente otra persona."
+    }
+  ];
+
+  nuevaPalabra();
 });
+
+function nuevaPalabra(){
+  if(data.length===0)return;
+
+  let indice;
+
+  do{
+    indice=Math.floor(Math.random()*data.length);
+  }while(indice===palabraAnterior && data.length>1);
+
+  palabraAnterior=indice;
+
+  start(data[indice].palabra,data[indice].pista);
+}
 
 function start(word,hint){
   errors=0;
@@ -367,50 +393,35 @@ function handleError(){
 
   character.className="character";
 
-  switch(errors){
-    case 1:
-      character.src=saludoGif;
-      character.classList.add("state1");
-      break;
+  if(errors===1){
+    character.src=saludoGif;
+    character.classList.add("state1");
+  }
 
-    case 2:
-      character.src=muertoGif;
-      character.classList.add("state2");
-      break;
+  if(errors===2){
+    character.src=muertoGif;
+    character.classList.add("state2");
+  }
 
-    case 3:
-      character.src=muertoGif;
-      character.classList.add("state3");
-      break;
+  if(errors===3){
+    character.src=muertoGif;
+    character.classList.add("state3");
+  }
 
-    case 4:
-      character.src=muertoGif;
-      character.classList.add("state4");
-      gameOver();
-      break;
+  if(errors===4){
+    character.src=muertoGif;
+    character.classList.add("state4");
+    gameOver();
   }
 }
 
 function vibrateError(){
   if(!navigator.vibrate)return;
 
-  switch(errors){
-    case 1:
-      navigator.vibrate(100);
-      break;
-
-    case 2:
-      navigator.vibrate([100,50,100]);
-      break;
-
-    case 3:
-      navigator.vibrate([150,50,150]);
-      break;
-
-    case 4:
-      navigator.vibrate([300,100,300,100,500]);
-      break;
-  }
+  if(errors===1) navigator.vibrate(80);
+  if(errors===2) navigator.vibrate([80,40,80]);
+  if(errors===3) navigator.vibrate([100,50,100]);
+  if(errors===4) navigator.vibrate([180,80,220]);
 }
 
 function gameOver(){
@@ -421,8 +432,8 @@ function gameOver(){
     });
 
   setTimeout(()=>{
-    alert("GAME OVER");
-  },1200);
+    nuevaPalabra();
+  },1600);
 }
 
 function checkWin(){
@@ -436,8 +447,8 @@ function checkWin(){
       });
 
     setTimeout(()=>{
-      alert("¡GANASTE!");
-    },700);
+      nuevaPalabra();
+    },1200);
   }
 }
 </script>
