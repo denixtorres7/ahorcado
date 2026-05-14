@@ -8,196 +8,146 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
 
 <style>
-  
 html,body{
-margin:0;
-padding:0;
-
-background:transparent;
-overflow:hidden;
-
-font-family:'Poppins',sans-serif;
+  margin:0;
+  padding:0;
+  background:transparent;
+  overflow:hidden;
+  font-family:'Poppins',sans-serif;
 }
 
 .game{
-
-position:relative;
-
-width:1365px;
-height:768px;
-
-background:transparent;
-
-overflow:hidden;
-
+  position:relative;
+  width:1365px;
+  height:768px;
+  background:transparent;
+  overflow:hidden;
 }
-
-/* panel gris */
 
 .panel{
-
-position:absolute;
-
-left:35px;
-top:50px;
-
-width:1290px;
-height:550px;
-
-background:#ECECEC;
-
-border-radius:35px;
-
+  position:absolute;
+  left:35px;
+  top:50px;
+  width:1290px;
+  height:550px;
+  background:#ECECEC;
+  border-radius:35px;
+  overflow:hidden;
 }
-
-/* pista */
 
 .pista{
-
-position:absolute;
-
-left:130px;
-top:25px;
-
-width:960px;
-
-padding:16px;
-
-background:white;
-
-border-radius:25px;
-
-font-size:26px;
-
-font-weight:700;
-
-text-align:center;
-
+  position:absolute;
+  left:130px;
+  top:25px;
+  width:960px;
+  padding:16px;
+  background:white;
+  border-radius:25px;
+  font-size:26px;
+  font-weight:700;
+  text-align:center;
 }
-
-/* casillas */
 
 .word-boxes{
-
-position:absolute;
-
-left:240px;
-
-top:155px;
-
-display:flex;
-
-gap:10px;
-
+  position:absolute;
+  left:215px;
+  top:160px;
+  display:flex;
+  gap:10px;
 }
-
-/* casillas rosadas */
 
 .card{
-
-width:68px;
-height:68px;
-
-perspective:1000px;
-
+  width:68px;
+  height:68px;
+  perspective:1000px;
 }
 
-/* teclado */
-
-.keyboard{
-
-position:absolute;
-
-left:135px;
-
-top:260px;
-
-display:grid;
-
-grid-template-columns:
-repeat(9,58px);
-
-gap:10px;
-
+.inner{
+  width:100%;
+  height:100%;
+  position:relative;
+  transform-style:preserve-3d;
+  transition:.6s;
 }
 
-.keyboard button{
-
-width:58px;
-height:58px;
-
-border-radius:12px;
-
-border:2px solid #555;
-
-background:white;
-
-font-family:Poppins;
-
-font-size:30px;
-
-font-weight:700;
-
-cursor:pointer;
-
+.card.flip .inner{
+  transform:rotateY(180deg);
 }
 
-/* personaje */
-
-.character{
-
-position:absolute;
-
-/* acercarlo */
-
-left:830px;
-
-/* subirlo */
-
-top:185px;
-
-/* tamaño grande */
-
-width:320px;
-
-height:auto;
-
-z-index:100;
-
-pointer-events:none;
-
-}
-
-/* letras */
-
-.front,.back{
-
-font-size:42px;
-
-font-weight:700;
-
-}
-
-.front{
-
-background:#ff23df;
-
+.front,
+.back{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:0;
+  background:#ff23df;
+  backface-visibility:hidden;
+  font-size:42px;
+  font-weight:700;
+  color:#000;
 }
 
 .back{
-
-background:#ff23df;
-
+  transform:rotateY(180deg);
 }
 
-.used{
-
-opacity:.35;
-
-pointer-events:none;
-
+.keyboard{
+  position:absolute;
+  left:110px;
+  top:285px;
+  display:grid;
+  grid-template-columns:repeat(9,58px);
+  gap:10px;
 }
 
+.keyboard button{
+  width:58px;
+  height:58px;
+  border-radius:12px;
+  border:2px solid #555;
+  background:white;
+  font-family:Poppins;
+  font-size:30px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.keyboard button.used{
+  opacity:.35;
+  pointer-events:none;
+}
+
+.character{
+  position:absolute;
+  left:850px;
+  top:150px;
+  width:430px;
+  height:auto;
+  z-index:100;
+  pointer-events:none;
+  transform-origin:bottom center;
+  transition:transform .5s, filter .5s;
+}
+
+.state1{
+  transform:rotate(-2deg) scale(1.01);
+}
+
+.state2{
+  transform:rotate(-4deg) scale(1.03);
+}
+
+.state3{
+  transform:rotate(-6deg) scale(1.05);
+  filter:brightness(.9);
+}
+
+.state4{
+  transform:rotate(8deg) scale(.96);
+  filter:brightness(.7);
+}
 </style>
 </head>
 
@@ -205,15 +155,10 @@ pointer-events:none;
 
 <div class="game">
   <div class="panel">
-
     <div class="pista" id="pista">Cargando...</div>
-
     <div class="word-boxes" id="boxes"></div>
-
     <div class="keyboard" id="keyboard"></div>
-
     <img id="character" class="character" src="Saludo_cuerpo_completo.gif" alt="personaje">
-
   </div>
 </div>
 
