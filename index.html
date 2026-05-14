@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
 <title>Bomba de emociones</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
@@ -23,30 +22,27 @@ body{
 }
 
 .pista{
-  width:70%;
-  margin:auto;
-  margin-top:30px;
+  width:86%;
+  margin:28px auto 0;
   background:white;
-  padding:15px;
-  border-radius:24px;
-  font-size:24px;
+  padding:18px;
+  border-radius:28px;
+  font-size:28px;
   text-align:center;
 }
 
 .word-boxes{
   display:flex;
   justify-content:center;
-  gap:10px;
-  margin-top:50px;
+  gap:12px;
+  margin:80px auto 0;
   flex-wrap:wrap;
-  width:72%;
-  margin-left:auto;
-  margin-right:auto;
+  width:78%;
 }
 
 .card{
-  width:60px;
-  height:60px;
+  width:70px;
+  height:70px;
   perspective:1000px;
 }
 
@@ -70,11 +66,11 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
-  border-radius:12px;
+  border-radius:14px;
   backface-visibility:hidden;
   font-family:Poppins;
   font-weight:700;
-  font-size:38px;
+  font-size:42px;
   text-transform:uppercase;
 }
 
@@ -91,24 +87,24 @@ body{
 .keyboard{
   display:flex;
   flex-wrap:wrap;
-  gap:8px;
-  width:70%;
   justify-content:center;
+  gap:10px;
+  width:55%;
   margin:auto;
   margin-top:90px;
-  padding-right:380px;
+  padding-right:500px;
   box-sizing:border-box;
 }
 
 .keyboard button{
-  width:52px;
-  height:52px;
-  font-size:28px;
+  width:58px;
+  height:58px;
+  font-size:32px;
   font-family:Poppins;
   background:white;
   border:2px solid #444;
   cursor:pointer;
-  border-radius:10px;
+  border-radius:12px;
 }
 
 .used{
@@ -118,12 +114,13 @@ body{
 
 .character{
   position:absolute;
-  right:40px;
-  bottom:120px;
-  width:450px;
+  right:20px;
+  bottom:40px;
+  width:620px;
   height:auto;
   z-index:10;
   pointer-events:none;
+  transform-origin:bottom right;
   transition:transform .5s, filter .5s;
 }
 
@@ -147,10 +144,10 @@ body{
   animation:shakeHard .25s infinite;
 }
 
-/* MUERTO */
+/* MUERTO FINAL */
 .state4{
-  transform:rotate(20deg) scale(.9);
-  filter:brightness(.45);
+  transform:rotate(18deg) scale(.95);
+  filter:brightness(.55);
   animation:shakeDeath .15s infinite;
 }
 
@@ -187,8 +184,9 @@ body{
   }
 
   .word-boxes{
-    width:90%;
+    width:92%;
     gap:6px;
+    margin-top:40px;
   }
 
   .card{
@@ -214,10 +212,9 @@ body{
   }
 
   .character{
-    width:260px;
+    width:300px;
     right:10px;
     bottom:20px;
-    opacity:.95;
   }
 }
 </style>
@@ -226,11 +223,8 @@ body{
 <body>
 
 <div class="game">
-
   <div class="pista" id="pista">Cargando...</div>
-
   <div class="word-boxes" id="boxes"></div>
-
   <div class="keyboard" id="keyboard"></div>
 
   <img
@@ -238,7 +232,6 @@ body{
     class="character"
     src="Saludo_cuerpo_completo.gif"
     alt="personaje">
-
 </div>
 
 <script>
@@ -282,7 +275,6 @@ fetch("palabras.csv")
   }
 
   let random=data[Math.floor(Math.random()*data.length)];
-
   start(random.palabra,random.pista);
 })
 .catch(()=>{
