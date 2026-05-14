@@ -38,7 +38,7 @@ html,body{
 .pista{
   position:relative;
   left:00px;
-  top:25px;
+  top:15px;
   width:960px;
   padding:16px;
   background:white;
@@ -51,7 +51,7 @@ html,body{
 .word-boxes{
   position:relative;
   left:100px;
-  top:110px;
+  top:50px;
   display:flex;
   gap:10px;
 }
@@ -124,10 +124,10 @@ html,body{
 position:absolute;
 
 /* pegarlo al lado derecho */
-right:-70px;
+right:20px;
 
 /* subirlo */
-top:130px;
+top:0px;
 
 /* tamaño GRANDE */
 width:1000px;
@@ -178,20 +178,25 @@ filter .5s;
     <div class="pista" id="pista">Cargando...</div>
     <div class="word-boxes" id="boxes"></div>
     <div class="keyboard" id="keyboard"></div>
-    <img id="character" class="character" src="Saludo_cuerpo_completo.gif" alt="personaje">
+    <img id="character" class="character" src="Muerto1.gif" alt="personaje">
   </div>
 </div>
 
 <script>
 let currentWord="";
 let revealed=[];
-let errors=4;
+let errors=0;
 let data=[];
 let palabraAnterior=-1;
 
-const saludoGif="Saludo_cuerpo_completo.gif";
-const muertoGif="Muerto.gif";
-const maxErrors=3;
+const muertoGif="Muerto1.gif";
+const errorGifs=[
+  "Muerto1.gif",
+  "Muerto2.gif",
+  "Muerto3.gif",
+  "Muerto4.gif"
+];
+const maxErrors=4;
 
 const boxes=document.getElementById("boxes");
 const keyboard=document.getElementById("keyboard");
@@ -271,7 +276,7 @@ function nuevaPalabra(){
 function start(word,hint){
   errors=0;
 
-  character.src=saludoGif;
+  character.src=errorGifs[0];
   character.className="character";
 
   currentWord=word
@@ -342,38 +347,33 @@ function check(letter){
 }
 
 function handleError(){
-  if(errors>=maxErrors) return;
 
-  errors++;
+ if(errors>=maxErrors)return;
 
-  vibrateError();
+ errors++;
 
-  character.className="character";
+ vibrateError();
 
-  if(errors===1){
-    character.src=muertoGif;
-    character.classList.add("state1");
-  }
+ character.className="character";
 
-  if(errors===2){
-    character.src=muertoGif;
-    character.classList.add("state2");
-  }
+ character.src=errorGifs[errors-1];
 
-  if(errors===3){
-    character.src=muertoGif;
-    character.classList.add("state3");
-  }
+ character.classList.add(
+   "state"+errors
+ );
 
-  if(errors===4){
-    character.src=muertoGif;
-    character.classList.add("state4");
+ if(errors===4){
 
-    setTimeout(()=>{
+   setTimeout(()=>{
+
       nuevaPalabra();
-    },1400);
-  }
+
+   },1400);
+
+ }
+
 }
+
 
 function checkWin(){
   if(revealed.every(v=>v)){
