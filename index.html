@@ -3,647 +3,415 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
 <title>Bomba de emociones</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
 
 <style>
-
-body{
-margin:0;
-background:#ECECEC;
-font-family:Poppins,sans-serif;
-overflow:hidden;
+html,body{
+  margin:0;
+  padding:0;
+  background:transparent;
+  font-family:'Poppins',sans-serif;
+  overflow:hidden;
 }
 
 .game{
-
-width:100vw;
-height:100vh;
-
-position:relative;
-
-padding-top:20px;
-
+  width:100vw;
+  height:100vh;
+  position:relative;
+  background:transparent;
 }
-
-/* PANEL */
 
 .panel{
-
-width:86%;
-
-margin:auto;
-
-background:#f3f3f3;
-
-border-radius:30px;
-
-padding:20px;
-
-position:relative;
-
+  width:92vw;
+  height:86vh;
+  margin:4vh auto 0;
+  background:rgba(245,245,245,.92);
+  border-radius:34px;
+  position:relative;
+  overflow:hidden;
 }
-
-/* PISTA */
 
 .pista{
-
-width:85%;
-
-margin:auto;
-
-background:white;
-
-padding:14px;
-
-border-radius:25px;
-
-font-size:22px;
-
-font-weight:700;
-
-text-align:center;
-
-margin-bottom:35px;
-
+  width:78%;
+  margin:28px auto 0;
+  background:white;
+  padding:16px 26px;
+  border-radius:28px;
+  text-align:center;
+  font-size:26px;
+  line-height:1.2;
 }
 
-/* CASILLAS */
-
 .word-boxes{
-
-display:flex;
-
-justify-content:center;
-
-gap:8px;
-
-flex-wrap:wrap;
-
-margin-top:20px;
-
-margin-bottom:35px;
-
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-top:55px;
+  width:72%;
+  margin-left:7%;
+  flex-wrap:wrap;
 }
 
 .card{
-
-width:62px;
-height:62px;
-
-perspective:1000px;
-
+  width:68px;
+  height:68px;
+  perspective:1000px;
 }
 
 .inner{
-
-position:relative;
-
-width:100%;
-height:100%;
-
-transform-style:preserve-3d;
-
-transition:.6s;
-
+  width:100%;
+  height:100%;
+  position:relative;
+  transform-style:preserve-3d;
+  transition:.6s;
 }
 
 .card.flip .inner{
-
-transform:
-rotateY(180deg);
-
+  transform:rotateY(180deg);
 }
 
-.front,
-.back{
-
-position:absolute;
-
-width:100%;
-height:100%;
-
-display:flex;
-
-justify-content:center;
-align-items:center;
-
-border-radius:14px;
-
-backface-visibility:hidden;
-
-font-size:38px;
-
-font-weight:700;
-
+.front,.back{
+  position:absolute;
+  width:100%;
+  height:100%;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  backface-visibility:hidden;
+  font-size:40px;
+  font-weight:700;
 }
 
 .front{
-
-background:#ff40e7;
-
+  background:#ff23df;
 }
 
 .back{
-
-background:#ff40e7;
-
-transform:
-rotateY(180deg);
-
+  background:#ff23df;
+  color:#000;
+  transform:rotateY(180deg);
 }
 
-/* TECLADO */
-
 .keyboard{
-
-display:flex;
-
-flex-wrap:wrap;
-
-justify-content:flex-start;
-
-gap:10px;
-
-width:60%;
-
-margin-left:40px;
-
+  width:56%;
+  margin-left:8%;
+  margin-top:38px;
+  display:grid;
+  grid-template-columns:repeat(9,58px);
+  gap:10px;
 }
 
 .keyboard button{
-
-width:58px;
-height:58px;
-
-border-radius:12px;
-
-border:2px solid #555;
-
-background:white;
-
-font-size:30px;
-
-font-family:Poppins;
-
-font-weight:700;
-
-cursor:pointer;
-
+  width:58px;
+  height:58px;
+  background:white;
+  border:2px solid #444;
+  border-radius:12px;
+  font-size:31px;
+  font-family:'Poppins',sans-serif;
+  font-weight:700;
+  cursor:pointer;
 }
 
-.used{
-
-opacity:.35;
-
-pointer-events:none;
-
+.keyboard button.used{
+  opacity:.35;
+  pointer-events:none;
 }
-
-/* PERSONAJE */
 
 .character{
-
-position:absolute;
-
-right:50px;
-
-/* más cerca */
-
-bottom:-5px;
-
-width:500px;
-
-z-index:100;
-
-pointer-events:none;
-
-transition:
-transform .5s,
-filter .5s;
-
-transform-origin:
-bottom center;
-
+  position:absolute;
+  right:5%;
+  bottom:2%;
+  width:34%;
+  max-width:480px;
+  min-width:300px;
+  height:auto;
+  z-index:20;
+  pointer-events:none;
+  transform-origin:bottom center;
+  transition:transform .5s, filter .5s;
 }
 
-/* errores suaves */
-
 .state1{
-
-transform:
-rotate(-2deg);
-
-animation:
-s1 .8s infinite;
-
+  transform:rotate(-2deg) scale(1.01);
+  animation:s1 .8s infinite;
 }
 
 .state2{
-
-transform:
-rotate(-4deg)
-scale(1.03);
-
-animation:
-s2 .7s infinite;
-
+  transform:rotate(-4deg) scale(1.03);
+  animation:s2 .7s infinite;
 }
 
 .state3{
-
-transform:
-rotate(-6deg)
-scale(1.05);
-
-animation:
-s3 .6s infinite;
-
+  transform:rotate(-6deg) scale(1.05);
+  filter:brightness(.9);
+  animation:s3 .6s infinite;
 }
 
 .state4{
-
-transform:
-rotate(8deg)
-scale(.95);
-
-animation:
-s4 .5s infinite;
-
-filter:
-brightness(.7);
-
+  transform:rotate(8deg) scale(.96);
+  filter:brightness(.7);
+  animation:s4 .5s infinite;
 }
 
 @keyframes s1{
-
-0%{transform:translateX(0)}
-50%{transform:translateX(-2px)}
-100%{transform:translateX(2px)}
-
+  0%{transform:translateX(0)}
+  50%{transform:translateX(-2px)}
+  100%{transform:translateX(2px)}
 }
 
 @keyframes s2{
-
-0%{transform:translateX(0)}
-50%{transform:translateX(-3px)}
-100%{transform:translateX(3px)}
-
+  0%{transform:translateX(0)}
+  50%{transform:translateX(-3px)}
+  100%{transform:translateX(3px)}
 }
 
 @keyframes s3{
-
-0%{transform:translateX(0)}
-50%{transform:translateX(-4px)}
-100%{transform:translateX(4px)}
-
+  0%{transform:translateX(0)}
+  50%{transform:translateX(-4px)}
+  100%{transform:translateX(4px)}
 }
 
 @keyframes s4{
-
-0%{transform:translateX(-5px)}
-50%{transform:translateX(5px)}
-100%{transform:translateX(-5px)}
-
+  0%{transform:translateX(-5px)}
+  50%{transform:translateX(5px)}
+  100%{transform:translateX(-5px)}
 }
-
 </style>
 </head>
 
 <body>
 
 <div class="game">
+  <div class="panel">
 
-<div class="panel">
+    <div class="pista" id="pista">Cargando...</div>
 
-<div
-class="pista"
-id="pista">
-Cargando...
-</div>
+    <div class="word-boxes" id="boxes"></div>
 
-<div
-class="word-boxes"
-id="boxes">
-</div>
+    <div class="keyboard" id="keyboard"></div>
 
-<div
-class="keyboard"
-id="keyboard">
-</div>
+    <img id="character" class="character" src="Saludo_cuerpo_completo.gif" alt="personaje">
 
-<img
-id="character"
-class="character"
-src="Saludo_cuerpo_completo.gif">
-
-</div>
-
+  </div>
 </div>
 
 <script>
-
 let currentWord="";
 let revealed=[];
 let errors=0;
-
+let data=[];
 let palabraAnterior=-1;
 
-let data=[];
+const saludoGif="Saludo_cuerpo_completo.gif";
+const muertoGif="Muerto.gif";
+const maxErrors=4;
 
-const saludoGif=
-"Saludo_cuerpo_completo.gif";
-
-const muertoGif=
-"Muerto.gif";
+const boxes=document.getElementById("boxes");
+const keyboard=document.getElementById("keyboard");
+const pista=document.getElementById("pista");
+const character=document.getElementById("character");
 
 const abc=[
-"A","B","C","D","E","F","G",
-"H","I","J","K","L","M",
-"N","Ñ","O","P","Q","R",
-"S","T","U","V","W","X",
-"Y","Z"
+  "A","B","C","D","E","F","G","H","I",
+  "J","K","L","M","N","Ñ","O","P","Q",
+  "R","S","T","U","V","W","X","Y","Z"
 ];
 
 fetch("palabras.csv")
 .then(r=>r.text())
 .then(csv=>{
+  const rows=csv.split(/\r?\n/);
+  data=[];
 
-let rows=
-csv.split(/\r?\n/);
+  for(let i=1;i<rows.length;i++){
+    const row=rows[i].trim();
+    if(!row) continue;
 
-for(let i=1;i<rows.length;i++){
+    const c=row.split(",");
 
-let c=
-rows[i].split(",");
+    if(c.length>=2){
+      data.push({
+        palabra:limpiarTexto(c[0]),
+        pista:limpiarTexto(c.slice(1).join(","))
+      });
+    }
+  }
 
-if(c.length>=2){
+  nuevaPalabra();
+})
+.catch(()=>{
+  data=[
+    {
+      palabra:"VULNERABLE",
+      pista:"Lo que intentas esconder tras una risa ruidosa o una actitud agresiva"
+    },
+    {
+      palabra:"EMPATIA",
+      pista:"Capacidad de comprender a otra persona"
+    },
+    {
+      palabra:"MIEDO",
+      pista:"Emoción que aparece ante una amenaza"
+    },
+    {
+      palabra:"ALEGRIA",
+      pista:"Emoción asociada a bienestar y satisfacción"
+    }
+  ];
 
-data.push({
-
-palabra:c[0].trim(),
-
-pista:
-c.slice(1)
-.join(",")
-
+  nuevaPalabra();
 });
 
+function limpiarTexto(texto){
+  return texto
+    .trim()
+    .replace(/^"+|"+$/g,"")
+    .replace(/"+$/g,"");
 }
-
-}
-
-nuevaPalabra();
-
-});
 
 function nuevaPalabra(){
+  let indice;
 
-let n;
+  do{
+    indice=Math.floor(Math.random()*data.length);
+  }while(indice===palabraAnterior && data.length>1);
 
-do{
+  palabraAnterior=indice;
 
-n=
-Math.floor(
-Math.random()*
-data.length
-);
-
-}
-
-while(
-n==palabraAnterior
-&& data.length>1
-);
-
-palabraAnterior=n;
-
-start(
-data[n].palabra,
-data[n].pista
-);
-
+  start(data[indice].palabra,data[indice].pista);
 }
 
 function start(word,hint){
+  errors=0;
 
-errors=0;
+  character.src=saludoGif;
+  character.className="character";
 
-character.src=
-saludoGif;
+  currentWord=word
+    .trim()
+    .toUpperCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"")
+    .substring(0,11);
 
-character.className=
-"character";
+  revealed=Array(currentWord.length).fill(false);
 
-currentWord=
-word
-.toUpperCase()
-.substring(0,11);
+  pista.innerHTML=limpiarTexto(hint);
 
-revealed=
-Array(
-currentWord.length
-)
-.fill(false);
-
-document
-.getElementById(
-"pista"
-)
-.innerHTML=
-hint.replace(/"/g,'');
-
-drawBoxes();
-
-drawKeyboard();
-
+  drawBoxes();
+  drawKeyboard();
 }
 
 function drawBoxes(){
+  boxes.innerHTML="";
 
-boxes.innerHTML="";
-
-currentWord
-.split("")
-.forEach((l,i)=>{
-
-boxes.innerHTML+=`
-
-<div
-class="card"
-data-index="${i}">
-
-<div class="inner">
-
-<div class="front">
-</div>
-
-<div class="back">
-
-${l}
-
-</div>
-
-</div>
-
-</div>
-
-`;
-
-});
-
+  currentWord.split("").forEach((letter,index)=>{
+    boxes.innerHTML+=`
+      <div class="card" data-index="${index}">
+        <div class="inner">
+          <div class="front"></div>
+          <div class="back">${letter}</div>
+        </div>
+      </div>
+    `;
+  });
 }
 
 function drawKeyboard(){
+  keyboard.innerHTML="";
 
-keyboard.innerHTML="";
+  abc.forEach(letter=>{
+    const btn=document.createElement("button");
+    btn.innerHTML=letter;
 
-abc.forEach(letter=>{
+    btn.onclick=()=>{
+      check(letter);
+      btn.classList.add("used");
+    };
 
-let b=
-document.createElement(
-"button"
-);
-
-b.innerHTML=
-letter;
-
-b.onclick=()=>{
-
-check(letter);
-
-b.classList.add(
-"used"
-);
-
-};
-
-keyboard.appendChild(b);
-
-});
-
+    keyboard.appendChild(btn);
+  });
 }
 
 function check(letter){
+  let found=false;
 
-let found=false;
+  currentWord.split("").forEach((l,i)=>{
+    if(l===letter){
+      found=true;
+      revealed[i]=true;
 
-currentWord
-.split("")
-.forEach((l,i)=>{
+      document
+        .querySelector(`.card[data-index='${i}']`)
+        .classList.add("flip");
+    }
+  });
 
-if(l==letter){
+  if(!found){
+    handleError();
+  }
 
-found=true;
-
-revealed[i]=true;
-
-document
-.querySelector(
-"[data-index='"+i+"']"
-)
-.classList.add(
-"flip"
-);
-
-}
-
-});
-
-if(!found){
-
-handleError();
-
-}
-
-checkWin();
-
+  checkWin();
 }
 
 function handleError(){
+  if(errors>=maxErrors) return;
 
-errors++;
+  errors++;
 
-character.className=
-"character";
+  vibrateError();
 
-if(errors==1){
+  character.className="character";
 
-character.classList.add(
-"state1"
-);
+  if(errors===1){
+    character.src=saludoGif;
+    character.classList.add("state1");
+  }
 
-}
+  if(errors===2){
+    character.src=muertoGif;
+    character.classList.add("state2");
+  }
 
-if(errors==2){
+  if(errors===3){
+    character.src=muertoGif;
+    character.classList.add("state3");
+  }
 
-character.src=
-muertoGif;
+  if(errors===4){
+    character.src=muertoGif;
+    character.classList.add("state4");
 
-character.classList.add(
-"state2"
-);
-
-}
-
-if(errors==3){
-
-character.src=
-muertoGif;
-
-character.classList.add(
-"state3"
-);
-
-}
-
-if(errors==4){
-
-character.src=
-muertoGif;
-
-character.classList.add(
-"state4"
-);
-
-setTimeout(
-nuevaPalabra,
-1200
-);
-
-}
-
-if(
-navigator.vibrate
-){
-
-navigator.vibrate(
-70
-);
-
-}
-
+    setTimeout(()=>{
+      nuevaPalabra();
+    },1400);
+  }
 }
 
 function checkWin(){
+  if(revealed.every(v=>v)){
+    document.querySelectorAll(".keyboard button").forEach(btn=>{
+      btn.disabled=true;
+    });
 
-if(
-revealed.every(
-x=>x
-)
-){
-
-setTimeout(
-nuevaPalabra,
-1000
-);
-
+    setTimeout(()=>{
+      nuevaPalabra();
+    },1200);
+  }
 }
 
-}
+function vibrateError(){
+  if(!navigator.vibrate) return;
 
+  if(errors===1) navigator.vibrate(70);
+  if(errors===2) navigator.vibrate([80,40,80]);
+  if(errors===3) navigator.vibrate([100,50,100]);
+  if(errors===4) navigator.vibrate([160,80,200]);
+}
 </script>
 
 </body>
